@@ -1,10 +1,11 @@
 NAME		=	philosophers
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -pthread
+CFLAGS		=	-Wall -Wextra -Werror -pthread -pthread 
 
 SRCS		=	src/philosophers.c\
-				utils/argument_prep.c
+				utils/argument_prep.c\
+				utils/tool_box.c
 
 OBJS		=	$(SRCS:.c=.o)
 

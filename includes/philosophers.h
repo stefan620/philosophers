@@ -32,9 +32,19 @@ typedef struct s_philosopher
     pthread_t    *threads;
 } t_philosopher;
 
+typedef struct s_fork
+{
+    t_philosopher *philosopher;
+    int           *id;
+    pthread_mutex_t *fork;
+} t_fork;
+
 // Function prototypes utils
 int data_prep(t_philosopher *philosopher, int argc, char **argv);
 int ft_atoi(const char *str);
+int get_time(void);
+void eat(t_fork *forks);
+void get_forks(t_fork *forks);
 
 // Function prototypes src
 int create_threads(t_philosopher *philosopher);

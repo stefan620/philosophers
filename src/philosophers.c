@@ -6,7 +6,7 @@
 /*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:46:59 by stefan            #+#    #+#             */
-/*   Updated: 2025/05/04 19:03:08 by stefan           ###   ########.fr       */
+/*   Updated: 2025/05/04 22:50:37 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,23 @@ int create_threads(t_philosopher *philosopher)
 }
 void  *philosopher_routine(void *arg)
 {
-    int *id;
-    id = (int *)arg;
-    printf(CREATION, *id);
+    t_fork *fork = (t_fork*)arg;
+    fork->id = (int*)arg;
+    printf(CREATION, *fork->id);
+    while (1)
+    {
+        eat(fork);
+    }
+    printf(CREATION, *fork->id);
     return (0);
+}
+void eat(t_fork *fork)
+{
+    get_forks(fork);
+}
+void get_forks (t_fork *fork)
+{
+    pthread_mutex_lock(&fork->fork[*(fork->id)]);
+    pthread_mutex_lock(&fork->fork[(*(fork->id) + 1) % fork->philosopher->number_of_philosophers]);
+    printf("Philosopher %d has fork\n", *(fork->id));
 }
