@@ -1,0 +1,31 @@
+NAME		=	philosophers
+
+CC			=	cc
+CFLAGS		=	-Wall -Wextra -Werror -pthread
+
+SRCS		=	src/philosophers.c\
+				utils/argument_prep.c
+
+OBJS		=	$(SRCS:.c=.o)
+
+INCLUDES	=	-I ./includes
+
+RM			=	rm -f
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+clean:
+	$(RM) $(OBJS)
+
+fclean: clean
+	$(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re
