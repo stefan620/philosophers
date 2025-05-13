@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:46:59 by stefan            #+#    #+#             */
-/*   Updated: 2025/05/04 22:50:37 by stefan           ###   ########.fr       */
+/*   Updated: 2025/05/13 17:48:46 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,61 +20,100 @@ int main(int argc, char **argv)
         return (1);
     if (create_threads(&philosopher))
         return (1);
+    if (create_mutexes(&philosopher))
+        return (1);
+    if (real_routine(&philosopher))
+        return (1);    
 }
 int create_threads(t_philosopher *philosopher)
 {
-    pthread_t *threads;
+    int i;
+    
+    philosopher->id = malloc(sizeof(int) * philosopher->number_of_philosophers);
+    if (!philosopher->id)
+        return (write(2, MEMORY_ERR, sizeof(MEMORY_ERR)), 1);
+    philosopher->threads = malloc(sizeof(pthread_t) * philosopher->number_of_philosophers);
+    if (!philosopher->threads)
+    {
+        free(philosopher->id);
+        return (write(2, MEMORY_ERR, sizeof(MEMORY_ERR)), 1);
+    }
+    for (i = 0; i < philosopher->number_of_philosophers; i++)
+    {
+        philosopher->id[i] = i + 1;
+        if (pthread_create(&philosopher->threads[i], NULL, philosopher_routine, &philosopher->id[i]))
+        {
+            free(philosopher->id);
+            free(philosopher->threads);
+            return (write(2, MEMORY_ERR, sizeof(MEMORY_ERR)), 1);
+        }
+        printf(CREATION, philosopher->id[i]);
+    }
+    return (0);
+}
+int  create_mutexes(t_philosopher *philosopher)
+{
     int i;
 
     i = 0;
-    threads = malloc(sizeof(pthread_t) * philosopher->number_of_philosophers);
-    if (!threads)
-        return (write(2, MEMORY_ERR, 32), 1);
-    philosopher->threads = threads;
-    philosopher->id = malloc(sizeof(int) * philosopher->number_of_philosophers);
-    if (!philosopher->id)
-    {
-        free(threads);
-        return (write(2, MEMORY_ERR, 32), 1);
-    }
+    philosopher->forks = malloc(sizeof(pthread_mutex_t) * philosopher->number_of_philosophers);
     while (i < philosopher->number_of_philosophers)
     {
-        philosopher->id[i] = i + 1;
-        i++;
-    }
-    i = 0;
-    while (i < philosopher->number_of_philosophers)
-    {
-        if (pthread_create(&threads[i], NULL, philosopher_routine, &philosopher->id[i]))
+        if (pthread_mutex_init(&philosopher->forks[i], NULL))
         {
-            while(--i != -1)
-                pthread_detach(threads[i]);
-            return (write(2, MEMORY_ERR, 32), 1);
+            free(philosopher->forks);// add mutex destruction if failed later
+            return (write(2, MEMORY_ERR, sizeof(MEMORY_ERR)), 1);
         }
-        pthread_join(threads[i], NULL);
+        printf("Fork %d created\n", i + 1);
         i++;
     }
     return (0);
 }
 void  *philosopher_routine(void *arg)
 {
-    t_fork *fork = (t_fork*)arg;
-    fork->id = (int*)arg;
-    printf(CREATION, *fork->id);
+    (void)arg;
+    return (NULL);
+}
+
+int real_routine(t_philosopher *philosopher)
+{
+    int i;
+    int num_eats;
+
+    i = 0;
+    num_eats = 0;
     while (1)
     {
-        eat(fork);
+        if (i >= philosopher->number_of_philosophers)
+            i = 0;
+        get_forks(philosopher, i);
+        eat(philosopher, i);
+        i++;
+        num_eats++;
+        // if (num_eats >= philosopher->number_of_times_each_philosopher_must_eat * philosopher->number_of_philosophers)
+        // {
+        //     printf("Philosopher %d has eaten %d times\n", i + 1, num_eats);
+        //     break;
+        // }
     }
-    printf(CREATION, *fork->id);
     return (0);
 }
-void eat(t_fork *fork)
+void eat(t_philosopher *philosopher, int i)
 {
-    get_forks(fork);
+    printf("Philosopher %d is eating\n", i + 1);
+    usleep(philosopher->time_to_eat * 100000);
+    pthread_mutex_unlock(&philosopher->forks[i]);
+    pthread_mutex_unlock(&philosopher->forks[i + 1]);
+    printf("Philosopher %d has put down forks\n", i + 1);
+    printf("Philosopher %d is sleeping\n", i + 1);
+    usleep(philosopher->time_to_sleep * 100000);
 }
-void get_forks (t_fork *fork)
+void get_forks(t_philosopher *philosopher, int i)
 {
-    pthread_mutex_lock(&fork->fork[*(fork->id)]);
-    pthread_mutex_lock(&fork->fork[(*(fork->id) + 1) % fork->philosopher->number_of_philosophers]);
-    printf("Philosopher %d has fork\n", *(fork->id));
+    printf("Philosopher %d is getting forks\n", i + 1);
+    usleep(100);
+    pthread_mutex_lock(&philosopher->forks[i]);
+    pthread_mutex_lock(&philosopher->forks[i+1]);
+    printf("Philosopher %d has taken forks%d %d\n", i + 1, i, i+1);
+    usleep(100);
 }

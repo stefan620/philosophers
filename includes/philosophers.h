@@ -30,24 +30,20 @@ typedef struct s_philosopher
     int           number_of_times_each_philosopher_must_eat;
     int           *id;
     pthread_t    *threads;
+    pthread_mutex_t *forks;
 } t_philosopher;
-
-typedef struct s_fork
-{
-    t_philosopher *philosopher;
-    int           *id;
-    pthread_mutex_t *fork;
-} t_fork;
 
 // Function prototypes utils
 int data_prep(t_philosopher *philosopher, int argc, char **argv);
 int ft_atoi(const char *str);
 int get_time(void);
-void eat(t_fork *forks);
-void get_forks(t_fork *forks);
+void eat(t_philosopher *forks, int i);
+void get_forks(t_philosopher *forks, int i);
 
 // Function prototypes src
 int create_threads(t_philosopher *philosopher);
 void *philosopher_routine(void *arg);
+int  create_mutexes(t_philosopher *philosopher);
+int real_routine(t_philosopher *philosopher);
 
 #endif // PHILOSOPHERS_H

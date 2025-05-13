@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   argument_prep.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:58:04 by stefan            #+#    #+#             */
-/*   Updated: 2025/05/04 19:04:54 by stefan           ###   ########.fr       */
+/*   Updated: 2025/05/13 17:44:21 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int data_prep(t_philosopher *philosopher, int argc, char **argv)
     philosopher->time_to_sleep = ft_atoi(argv[4]);
     if (philosopher->time_to_sleep < 1)
         return (write(2, ERR_MSG7, sizeof(ERR_MSG7)), 1);
+    if (philosopher->number_of_philosophers < 1)
+        philosopher->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
     return (0);
 }
 int ft_atoi(const char *str)
