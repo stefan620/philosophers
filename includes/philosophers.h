@@ -29,8 +29,12 @@ typedef struct s_philosopher
     int           number_of_philosophers;
     int           number_of_times_each_philosopher_must_eat;
     int           *id;
+    int           status;
+    int           *last_meal;
     pthread_t    *threads;
+    pthread_t     *control;
     pthread_mutex_t *forks;
+    pthread_mutex_t *meal;
 } t_philosopher;
 
 // Function prototypes utils
@@ -45,5 +49,7 @@ int create_threads(t_philosopher *philosopher);
 void *philosopher_routine(void *arg);
 int  create_mutexes(t_philosopher *philosopher);
 int real_routine(t_philosopher *philosopher);
-
+void put_forks(t_philosopher *philosopher, int i);
+int create_control_thread(t_philosopher *philosopher);
+void *control_routine(void *arg);
 #endif // PHILOSOPHERS_H

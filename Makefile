@@ -5,7 +5,8 @@ CFLAGS		=	-Wall -Wextra -Werror -pthread -pthread
 
 SRCS		=	src/philosophers.c\
 				utils/argument_prep.c\
-				utils/tool_box.c
+				utils/tool_box.c\
+				src/control.c
 
 OBJS		=	$(SRCS:.c=.o)
 

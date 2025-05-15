@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:46:59 by stefan            #+#    #+#             */
-/*   Updated: 2025/05/13 17:48:46 by silic            ###   ########.fr       */
+/*   Updated: 2025/05/15 17:52:05 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,14 @@ int main(int argc, char **argv)
 {
     t_philosopher philosopher;
     
+    philosopher.status = 0;
     if (data_prep(&philosopher, argc, argv))
         return (1);
     if (create_threads(&philosopher))
         return (1);
     if (create_mutexes(&philosopher))
+        return (1);
+    if (create_control_thread(&philosopher))
         return (1);
     if (real_routine(&philosopher))
         return (1);    
@@ -47,7 +50,6 @@ int create_threads(t_philosopher *philosopher)
             free(philosopher->threads);
             return (write(2, MEMORY_ERR, sizeof(MEMORY_ERR)), 1);
         }
-        printf(CREATION, philosopher->id[i]);
     }
     return (0);
 }
@@ -57,6 +59,14 @@ int  create_mutexes(t_philosopher *philosopher)
 
     i = 0;
     philosopher->forks = malloc(sizeof(pthread_mutex_t) * philosopher->number_of_philosophers);
+    if (!philosopher->forks)
+        return (write(2, MEMORY_ERR, sizeof(MEMORY_ERR)), 1);
+    philosopher->meal = malloc(sizeof(pthread_mutex_t));
+    if (!philosopher->meal)
+    {
+        free(philosopher->forks);
+        return (write(2, MEMORY_ERR, sizeof(MEMORY_ERR)), 1);
+    }
     while (i < philosopher->number_of_philosophers)
     {
         if (pthread_mutex_init(&philosopher->forks[i], NULL))
@@ -64,8 +74,12 @@ int  create_mutexes(t_philosopher *philosopher)
             free(philosopher->forks);// add mutex destruction if failed later
             return (write(2, MEMORY_ERR, sizeof(MEMORY_ERR)), 1);
         }
-        printf("Fork %d created\n", i + 1);
         i++;
+    }
+    if (pthread_mutex_init(philosopher->meal, NULL))
+    {
+        free(philosopher->forks);
+        return (write(2, MEMORY_ERR, sizeof(MEMORY_ERR)), 1);
     }
     return (0);
 }
@@ -82,12 +96,13 @@ int real_routine(t_philosopher *philosopher)
 
     i = 0;
     num_eats = 0;
-    while (1)
+    while (!philosopher->status)
     {
         if (i >= philosopher->number_of_philosophers)
             i = 0;
         get_forks(philosopher, i);
         eat(philosopher, i);
+        put_forks(philosopher, i);
         i++;
         num_eats++;
         // if (num_eats >= philosopher->number_of_times_each_philosopher_must_eat * philosopher->number_of_philosophers)
@@ -100,20 +115,21 @@ int real_routine(t_philosopher *philosopher)
 }
 void eat(t_philosopher *philosopher, int i)
 {
-    printf("Philosopher %d is eating\n", i + 1);
+    printf("%d is eating\n", i + 1);
+    *philosopher->last_meal = get_time();
     usleep(philosopher->time_to_eat * 100000);
-    pthread_mutex_unlock(&philosopher->forks[i]);
-    pthread_mutex_unlock(&philosopher->forks[i + 1]);
-    printf("Philosopher %d has put down forks\n", i + 1);
-    printf("Philosopher %d is sleeping\n", i + 1);
+    printf("%d is sleeping\n", i + 1);
     usleep(philosopher->time_to_sleep * 100000);
 }
 void get_forks(t_philosopher *philosopher, int i)
 {
-    printf("Philosopher %d is getting forks\n", i + 1);
-    usleep(100);
     pthread_mutex_lock(&philosopher->forks[i]);
     pthread_mutex_lock(&philosopher->forks[i+1]);
-    printf("Philosopher %d has taken forks%d %d\n", i + 1, i, i+1);
+    printf("%d has taken forks%d %d\n", i + 1, i, i+1);
     usleep(100);
+}
+void put_forks(t_philosopher *philosopher, int i)
+{
+    pthread_mutex_unlock(&philosopher->forks[i]);
+    pthread_mutex_unlock(&philosopher->forks[i+1]);
 }
