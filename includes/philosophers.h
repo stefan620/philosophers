@@ -23,7 +23,7 @@
 typedef struct s_philo {
     int id;
     pthread_t thread;
-    struct s_philosopher *philosopher; // for shared data
+    struct s_philosopher *philosopher;
 } t_philo;
 
 typedef struct s_philosopher
@@ -34,6 +34,8 @@ typedef struct s_philosopher
     int time_to_eat;
     int time_to_sleep;
     int number_of_times_each_philosopher_must_eat;
+    pthread_mutex_t *forks;
+    int start;
 } t_philosopher;
 
 
