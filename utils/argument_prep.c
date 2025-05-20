@@ -28,8 +28,13 @@ int data_prep(t_philosopher *philosopher, int argc, char **argv)
     philosopher->time_to_sleep = ft_atoi(argv[4]);
     if (philosopher->time_to_sleep < 1)
         return (write(2, ERR_MSG7, sizeof(ERR_MSG7)), 1);
-    if (philosopher->number_of_philosophers < 1)
+    philosopher->number_of_times_each_philosopher_must_eat = -1;  // Default to -1 (infinite)
+    if (argc == 6)
+    {
         philosopher->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
+        if (philosopher->number_of_times_each_philosopher_must_eat < 1)
+            return (write(2, ERR_MSG4, sizeof(ERR_MSG4)), 1);
+    }
     return (0);
 }
 int ft_atoi(const char *str)

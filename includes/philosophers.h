@@ -20,36 +20,26 @@
 #define MEMORY_ERR "Error: Memory allocation failed\n"
 #define CREATION "Philosopher %d is created\n"
 
+typedef struct s_philo {
+    int id;
+    pthread_t thread;
+    struct s_philosopher *philosopher; // for shared data
+} t_philo;
 
 typedef struct s_philosopher
 {
-    int           time_to_die;
-    int           time_to_eat;
-    int           time_to_sleep;
-    int           number_of_philosophers;
-    int           number_of_times_each_philosopher_must_eat;
-    int           *id;
-    int           status;
-    int           *last_meal;
-    pthread_t    *threads;
-    pthread_t     *control;
-    pthread_mutex_t *forks;
-    pthread_mutex_t *meal;
+    t_philo *philo;
+    int number_of_philosophers;
+    int time_to_die;
+    int time_to_eat;
+    int time_to_sleep;
+    int number_of_times_each_philosopher_must_eat;
 } t_philosopher;
 
-// Function prototypes utils
-int data_prep(t_philosopher *philosopher, int argc, char **argv);
-int ft_atoi(const char *str);
-int get_time(void);
-void eat(t_philosopher *forks, int i);
-void get_forks(t_philosopher *forks, int i);
 
-// Function prototypes src
-int create_threads(t_philosopher *philosopher);
-void *philosopher_routine(void *arg);
-int  create_mutexes(t_philosopher *philosopher);
-int real_routine(t_philosopher *philosopher);
-void put_forks(t_philosopher *philosopher, int i);
-int create_control_thread(t_philosopher *philosopher);
-void *control_routine(void *arg);
+int data_prep(t_philosopher *philosopher, int argc, char **argv);
+int create_philo(t_philosopher *philosopher, t_philo *philo);
+void *philo_routine(void *arg);
+int ft_atoi(const char *str);
+
 #endif // PHILOSOPHERS_H
