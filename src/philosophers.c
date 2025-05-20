@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 17:40:12 by silic             #+#    #+#             */
-/*   Updated: 2025/05/20 18:09:23 by silic            ###   ########.fr       */
+/*   Updated: 2025/05/20 18:34:16 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,16 @@ void get_forks(t_philosopher *philosopher, int id);
 void put_forks(t_philosopher *philosopher, int id);
 void eat(t_philosopher *philosopher, int id);
 void sleep1(t_philosopher *philosopher, int id);
+int init_control_thread(t_philosopher *philosopher, t_control *control);
+void *control_routine(void *arg);
 
 int main(int argc, char **argv)
 {
     t_philosopher philosopher;
     t_philo *philos;
+    t_control control;
 
+    philosopher.dead = 0;    
     if (data_prep(&philosopher, argc, argv))
         return (1);
 
@@ -37,7 +41,12 @@ int main(int argc, char **argv)
         printf("Error creating forks\n");
         return (1);
     }
-
+    if (init_control_thread(&philosopher, &control))
+    {
+        free(philos);
+        printf("Error creating control thread\n");
+        return (1);
+    }
     if (create_philo(&philosopher, philos))
     {
         free(philos);
@@ -71,6 +80,7 @@ int create_philo(t_philosopher *philosopher, t_philo *philos)
         }
         i++;
     }
+    usleep(1000);
     philosopher->start = 1;
     return (0);
 }
@@ -79,7 +89,8 @@ void *philo_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
     printf(CREATION, philo->id);
-    while (1)
+    printf("phil %d\n", philo->philosopher->dead);
+    while (!philo->philosopher->dead)
     {
         while (1)
         {
@@ -92,6 +103,7 @@ void *philo_routine(void *arg)
         sleep1(philo->philosopher, philo->id - 1);
         printf("Philosopher %d is thinking\n", philo->id);
     }
+    printf("Philosopher %d is dead\n", philo->id);
     return (NULL);
 }
 int create_forks(t_philosopher *philosopher)
@@ -132,4 +144,25 @@ void sleep1(t_philosopher *philosopher, int id)
 {
     printf("Philosopher %d is sleeping\n", id + 1);
     usleep(philosopher->time_to_sleep * 10000);
+}
+int init_control_thread(t_philosopher *philosopher, t_control *control)
+{
+    philosopher->start = 0;
+    if (pthread_create(&control->ctrl_thread, NULL, control_routine, &control ) != 0)
+    {
+        perror("Failed to create control thread");
+        return (1);
+    }
+    return (0);
+}
+
+void *control_routine(void *arg)
+{
+    t_control *control = (t_control *)arg;
+    while (1)
+    {
+        sleep(10);
+        control->philosopher->dead = 1;
+    }
+    return (NULL);
 }

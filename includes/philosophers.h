@@ -26,6 +26,11 @@ typedef struct s_philo {
     struct s_philosopher *philosopher;
 } t_philo;
 
+typedef struct s_control {
+    pthread_t ctrl_thread;
+    struct s_philosopher *philosopher;
+} t_control;
+
 typedef struct s_philosopher
 {
     t_philo *philo;
@@ -36,6 +41,7 @@ typedef struct s_philosopher
     int number_of_times_each_philosopher_must_eat;
     pthread_mutex_t *forks;
     int start;
+    int dead;
 } t_philosopher;
 
 
