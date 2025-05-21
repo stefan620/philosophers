@@ -42,6 +42,8 @@ typedef struct s_philosopher
     pthread_mutex_t *forks;
     int start;
     int dead;
+    int64_t last_meal;
+    pthread_mutex_t meal_mutex;
 } t_philosopher;
 
 
@@ -49,5 +51,6 @@ int data_prep(t_philosopher *philosopher, int argc, char **argv);
 int create_philo(t_philosopher *philosopher, t_philo *philo);
 void *philo_routine(void *arg);
 int ft_atoi(const char *str);
+int64_t get_time(void);
 
 #endif // PHILOSOPHERS_H

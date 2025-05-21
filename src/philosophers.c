@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
+/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 17:40:12 by silic             #+#    #+#             */
-/*   Updated: 2025/05/20 18:34:16 by silic            ###   ########.fr       */
+/*   Updated: 2025/05/21 22:45:15 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int create_philo(t_philosopher *philosopher, t_philo *philos)
     {
         philos[i].id = i + 1;
         philos[i].philosopher = philosopher; 
-
+        pthread_mutex_init(&philosopher[i].meal_mutex, NULL);
         if (pthread_create(&philos[i].thread, NULL, philo_routine, &philos[i]) != 0)
         {
             perror("Failed to create thread");
@@ -89,7 +89,6 @@ void *philo_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
     printf(CREATION, philo->id);
-    printf("phil %d\n", philo->philosopher->dead);
     while (!philo->philosopher->dead)
     {
         while (1)
@@ -137,18 +136,24 @@ void put_forks(t_philosopher *philosopher, int id)
 }
 void eat(t_philosopher *philosopher, int id)
 {
+    // Lock before updating the last meal time
+    pthread_mutex_lock(&philosopher->meal_mutex);
+    philosopher->last_meal = get_time();
+    printf("Philosopher %d is eating\n", get_time());
+    pthread_mutex_unlock(&philosopher->meal_mutex);
     printf("Philosopher %d is eating\n", id + 1);
-    usleep(philosopher->time_to_eat * 10000);
+    usleep(philosopher->time_to_eat * 1000); // Multiply by 1000 (not 10000!) to convert ms to µs
 }
 void sleep1(t_philosopher *philosopher, int id)
 {
     printf("Philosopher %d is sleeping\n", id + 1);
-    usleep(philosopher->time_to_sleep * 10000);
+    usleep(philosopher->time_to_sleep * 1000);
 }
 int init_control_thread(t_philosopher *philosopher, t_control *control)
 {
     philosopher->start = 0;
-    if (pthread_create(&control->ctrl_thread, NULL, control_routine, &control ) != 0)
+    control->philosopher = philosopher;
+    if (pthread_create(&control->ctrl_thread, NULL, control_routine, control) != 0)
     {
         perror("Failed to create control thread");
         return (1);
@@ -159,10 +164,20 @@ int init_control_thread(t_philosopher *philosopher, t_control *control)
 void *control_routine(void *arg)
 {
     t_control *control = (t_control *)arg;
+    control->philosopher->dead = 0;
     while (1)
     {
-        sleep(10);
-        control->philosopher->dead = 1;
+        pthread_mutex_lock(&control->philosopher->meal_mutex);
+        printf("%ld %ld\n", control->philosopher->last_meal, control->philosopher->time_to_die);
+        pthread_mutex_unlock(&control->philosopher->meal_mutex);
+        printf("%ld\n", get_time());
+        sleep(100);
+        if (get_time() - control->philosopher->last_meal >= control->philosopher->time_to_die)
+        {
+            control->philosopher->dead = 1;
+        }
+        usleep(100);
+        
     }
     return (NULL);
 }
