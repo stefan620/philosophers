@@ -4,6 +4,9 @@ CC			=	cc
 CFLAGS		= -pthread
 
 SRCS		=	./src/philosophers.c \
+				./src/routines.c \
+				./src/init.c \
+				./src/cycle.c \
 				./utils/argument_prep.c \
 				./utils/tool_box.c 
 

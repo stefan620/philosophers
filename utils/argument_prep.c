@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:58:04 by stefan            #+#    #+#             */
-/*   Updated: 2025/05/13 17:44:21 by silic            ###   ########.fr       */
+/*   Updated: 2025/05/27 15:29:35 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int data_prep(t_philosopher *philosopher, int argc, char **argv)
     philosopher->time_to_sleep = ft_atoi(argv[4]);
     if (philosopher->time_to_sleep < 1)
         return (write(2, ERR_MSG7, sizeof(ERR_MSG7)), 1);
-    philosopher->number_of_times_each_philosopher_must_eat = -1;  // Default to -1 (infinite)
+    philosopher->number_of_times_each_philosopher_must_eat = -1;
     if (argc == 6)
     {
         philosopher->number_of_times_each_philosopher_must_eat = ft_atoi(argv[5]);
