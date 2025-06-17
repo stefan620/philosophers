@@ -14,7 +14,12 @@
 
 int create_philo(t_philosopher *philosopher, t_philo *philo)
 {
+    pthread_mutex_init(&philosopher->start_mutex, NULL);
+    pthread_mutex_lock(&philosopher->start_mutex);
     philosopher->start = 0;
+    philosopher->dead = 0;
+    pthread_mutex_init(&philosopher->dead_mutex, NULL);
+    
     for (int i = 0; i < philosopher->number_of_philosophers; i++)
     {
         philo[i].id = i + 1;
@@ -24,11 +29,14 @@ int create_philo(t_philosopher *philosopher, t_philo *philo)
         if (pthread_create(&philo[i].thread, NULL, philo_routine, &philo[i]) != 0)
         {
             printf(ERR_PHILO);
+            pthread_mutex_unlock(&philosopher->start_mutex);
+            pthread_mutex_destroy(&philosopher->start_mutex);
             return (1);
         }
     }
     usleep(1000);
     philosopher->start = 1;
+    pthread_mutex_unlock(&philosopher->start_mutex);
     return (0);
 }
 
@@ -44,6 +52,18 @@ int create_forks(t_philosopher *philosopher)
 
     return 0;
 }
+
+void cleanup_mutexes(t_philosopher *philosopher)
+{
+    for (int i = 0; i < philosopher->number_of_philosophers; i++)
+    {
+        pthread_mutex_destroy(&philosopher->philo_array[i].meal_mutex);
+        pthread_mutex_destroy(&philosopher->forks[i]);
+    }
+    pthread_mutex_destroy(&philosopher->dead_mutex);
+    pthread_mutex_destroy(&philosopher->start_mutex);
+}
+
 int init_control_thread(t_philosopher *philosopher, t_control *control, t_philo *philo_array)
 {
     control->philosopher = philosopher;

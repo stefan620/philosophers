@@ -54,6 +54,8 @@ typedef struct s_philosopher {
     int time_to_sleep;
     int number_of_times_each_philosopher_must_eat;
     pthread_mutex_t *forks;
+    pthread_mutex_t dead_mutex;
+    pthread_mutex_t start_mutex;
     int start;
     int dead;
 } t_philosopher;
@@ -67,11 +69,10 @@ int64_t get_time(void);
 
 // Internal helpers declared in philosophers.c
 int create_forks(t_philosopher *philosopher);
-void get_forks(t_philosopher *philosopher, int id);
-void put_forks(t_philosopher *philosopher, int id);
 void eat(t_philosopher *philosopher, int id);
 void sleep1(t_philosopher *philosopher, int id);
 int init_control_thread(t_philosopher *philosopher, t_control *control, t_philo *philo_array);
 void *control_routine(void *arg);
+void cleanup_mutexes(t_philosopher *philosopher);
 
 #endif // PHILOSOPHERS_H

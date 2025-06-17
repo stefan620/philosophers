@@ -16,9 +16,9 @@ int main(int argc, char **argv)
         return (1);
     philosopher.philo_array = philo;
     if (create_forks(&philosopher))
-        return (free(philo),printf(ERR_fORKS), 1);
+        return (free(philo), printf(ERR_fORKS), 1);
     if (create_philo(&philosopher, philo))
-        return (free(philo),printf(ERR_PHILO), 1);
+        return (free(philo), printf(ERR_PHILO), 1);
     if (init_control_thread(&philosopher, &control, philo))
         return (free(philo), printf(ERR_THREAD), 1);
     while (i < philosopher.number_of_philosophers)
@@ -27,6 +27,7 @@ int main(int argc, char **argv)
         i++;
     }
     pthread_join(control.ctrl_thread, NULL);
+    cleanup_mutexes(&philosopher);
     free(philo);
     free(philosopher.forks);
     return (0);
