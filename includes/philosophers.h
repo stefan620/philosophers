@@ -49,6 +49,7 @@ typedef struct s_philo
 	pthread_t				thread;
 	struct s_philosopher	*philosopher;
 	pthread_mutex_t			meal_mutex;
+	int						meals_eaten;
 	int64_t					last_meal;
 }	t_philo;
 
@@ -67,6 +68,7 @@ typedef struct s_philosopher
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				number_of_times_each_philosopher_must_eat;
+	int64_t			start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	dead_mutex;
 	pthread_mutex_t	start_mutex;

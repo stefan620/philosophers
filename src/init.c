@@ -27,7 +27,8 @@ int	create_philo(t_philosopher *philosopher, t_philo *philo)
 		philo[i].id = i + 1;
 		philo[i].philosopher = philosopher;
 		pthread_mutex_init(&philo[i].meal_mutex, NULL);
-		philo[i].last_meal = get_time();
+		philo[i].last_meal = 0;
+		philo[i].meals_eaten = 0;
 		if (pthread_create(&philo[i].thread, NULL, philo_routine, &philo[i]) != 0)
 		{
 			printf(ERR_PHILO);
@@ -36,7 +37,13 @@ int	create_philo(t_philosopher *philosopher, t_philo *philo)
 		}
 		i++;
 	}
-	usleep(1000);
+	philosopher->start_time = get_time();
+	i = 0;
+	while (i < philosopher->number_of_philosophers)
+	{
+		philo[i].last_meal = philosopher->start_time;
+		i++;
+	}
 	philosopher->start = 1;
 	return (pthread_mutex_unlock(&philosopher->start_mutex), 0);
 }

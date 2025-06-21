@@ -6,7 +6,7 @@
 /*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:28:23 by silic             #+#    #+#             */
-/*   Updated: 2025/06/17 22:17:28 by stefan           ###   ########.fr       */
+/*   Updated: 2025/06/21 15:48:10 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,23 @@
 void	eat(t_philosopher *philosopher, int id)
 {
 	t_philo	*philo;
-	int64_t	start_time;
-	int64_t	end_time;
 
 	philo = &philosopher->philo_array[id];
-	start_time = get_time();
-	pthread_mutex_lock (&philo->meal_mutex);
-	philo->last_meal = start_time;
-	pthread_mutex_unlock (&philo->meal_mutex);
-	pthread_mutex_lock (&philosopher->dead_mutex);
+	pthread_mutex_lock(&philosopher->dead_mutex);
 	if (philosopher->dead)
 	{
 		pthread_mutex_unlock(&philosopher->dead_mutex);
 		return ;
 	}
-	pthread_mutex_unlock (&philosopher->dead_mutex);
-	printf (EAT_MSG, start_time, id + 1);
-	usleep (philosopher->time_to_eat * 1000);
-	end_time = get_time();
-	pthread_mutex_lock (&philo->meal_mutex);
-	philo->last_meal = end_time;
-	pthread_mutex_unlock (&philo->meal_mutex);
+	pthread_mutex_unlock(&philosopher->dead_mutex);
+	pthread_mutex_lock(&philo->meal_mutex);
+	philo->last_meal = get_time();
+	printf(EAT_MSG, philo->last_meal, id + 1);
+	philo->meals_eaten++;
+	pthread_mutex_unlock(&philo->meal_mutex);
+	usleep(philosopher->time_to_eat * 1000);
 }
+
 
 void	sleep1(t_philosopher *philosopher, int id)
 {
