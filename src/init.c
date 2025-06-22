@@ -6,7 +6,7 @@
 /*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:26:18 by silic             #+#    #+#             */
-/*   Updated: 2025/06/17 22:12:24 by stefan           ###   ########.fr       */
+/*   Updated: 2025/06/22 13:44:35 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,8 @@ int	create_philo(t_philosopher *philosopher, t_philo *philo)
 	pthread_mutex_init(&philosopher->dead_mutex, NULL);
 	while (i < philosopher->number_of_philosophers)
 	{
-		philo[i].id = i + 1;
-		philo[i].philosopher = philosopher;
-		pthread_mutex_init(&philo[i].meal_mutex, NULL);
-		philo[i].last_meal = 0;
-		philo[i].meals_eaten = 0;
-		if (pthread_create(&philo[i].thread, NULL, philo_routine, &philo[i]) != 0)
-		{
-			printf(ERR_PHILO);
-			pthread_mutex_unlock(&philosopher->start_mutex);
+		if (create_philo_extend(philosopher, philo, i))
 			return (pthread_mutex_destroy(&philosopher->start_mutex), 1);
-		}
 		i++;
 	}
 	philosopher->start_time = get_time();

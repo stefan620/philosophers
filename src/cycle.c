@@ -6,7 +6,7 @@
 /*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:28:23 by silic             #+#    #+#             */
-/*   Updated: 2025/06/21 15:48:10 by stefan           ###   ########.fr       */
+/*   Updated: 2025/06/21 17:30:25 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	eat(t_philosopher *philosopher, int id)
 	pthread_mutex_unlock(&philo->meal_mutex);
 	usleep(philosopher->time_to_eat * 1000);
 }
-
 
 void	sleep1(t_philosopher *philosopher, int id)
 {

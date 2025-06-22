@@ -6,7 +6,7 @@
 /*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:23:43 by silic             #+#    #+#             */
-/*   Updated: 2025/06/17 22:32:24 by stefan           ###   ########.fr       */
+/*   Updated: 2025/06/22 13:14:53 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@ void	*philo_routine(void *arg)
 	int		v[8];
 
 	philo = (t_philo *)arg;
-
 	if (philo->id % 2 == 0)
 	usleep(1000);
-
 	while (1)
 	{
 		if (check_is_dead(philo))
@@ -85,14 +83,14 @@ void	*control_routine(void *arg)
 				pthread_mutex_unlock(&philos[i].meal_mutex);
 				return (NULL);
 			}
-			if (philosopher->number_of_times_each_philosopher_must_eat != -1
+			if (philosopher->number_of_times_each_philo_must_eat != -1
 				&& philos[i].meals_eaten >=
-				philosopher->number_of_times_each_philosopher_must_eat)
+				philosopher->number_of_times_each_philo_must_eat)
 				finished_eating_count++;
 			pthread_mutex_unlock(&philos[i].meal_mutex);
 			i++;
 		}
-		if (philosopher->number_of_times_each_philosopher_must_eat != -1
+		if (philosopher->number_of_times_each_philo_must_eat != -1
 			&& finished_eating_count == philosopher->number_of_philosophers)
 		{
 			pthread_mutex_lock(&philosopher->dead_mutex);

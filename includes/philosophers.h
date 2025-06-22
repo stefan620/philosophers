@@ -6,7 +6,7 @@
 /*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:46:02 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/17 22:46:31 by stefan           ###   ########.fr       */
+/*   Updated: 2025/06/22 13:43:08 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct s_philosopher
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-	int				number_of_times_each_philosopher_must_eat;
+	int				number_of_times_each_philo_must_eat;
 	int64_t			start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	dead_mutex;
@@ -78,6 +78,7 @@ typedef struct s_philosopher
 
 int		data_prep(t_philosopher *philosopher, int argc, char **argv);
 int		create_philo(t_philosopher *philosopher, t_philo *philo);
+int		create_philo_extend(t_philosopher *philosopher, t_philo *philo, int i);
 void	*philo_routine(void *arg);
 int		ft_atoi(const char *str);
 int64_t	get_time(void);
@@ -90,7 +91,8 @@ void	release_forks(t_philo *philo, int *v);
 int		create_forks(t_philosopher *philosopher);
 void	eat(t_philosopher *philosopher, int id);
 void	sleep1(t_philosopher *philosopher, int id);
-int		init_control_thread(t_philosopher *philosopher, t_control *control, t_philo *philo_array);
+int		init_control_thread(t_philosopher *philosopher,\
+		t_control *control, t_philo *philo_array);
 void	*control_routine(void *arg);
 void	cleanup_mutexes(t_philosopher *philosopher);
 

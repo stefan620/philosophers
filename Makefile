@@ -5,6 +5,7 @@ CFLAGS		= -pthread
 
 SRCS		=	./src/philosophers.c \
 				./src/routines.c \
+				./src/init_utils.c \
 				./src/routine_utils.c \
 				./src/init.c \
 				./src/cycle.c \
