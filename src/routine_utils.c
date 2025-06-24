@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:48:14 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/24 14:22:52 by silic            ###   ########.fr       */
+/*   Updated: 2025/06/24 16:22:06 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	check_started(t_philo *philo)
 void	determine_fork_order(t_philo *philo, int *v)
 {
 	v[LEFT_FORK] = philo->id - 1;
-	v[RIGHT_FORK] = philo->id % philo->philosopher->number_of_philosophers;
+	v[RIGHT_FORK] = philo->id % (philo->philosopher->number_of_philosophers + 1);
 	v[HAS_LEFT] = 0;
 	v[HAS_RIGHT] = 0;
 	if ((philo->id - 1) % 2 == 0)
