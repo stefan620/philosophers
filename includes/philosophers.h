@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:46:02 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/24 13:09:36 by silic            ###   ########.fr       */
+/*   Updated: 2025/06/24 16:27:32 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 # define ERR_FORKS "Error: Forks creation failed\n"
 # define ERR_PHILO "Error: Philosopher creation failed\n"
 # define ERR_THREAD "Error: Thread creation failed\n"
-# define DEAD_MSG "%ld %d is dead\n"
+# define DEAD_MSG "%ld %d died\n"
 # define EAT_MSG "%ld %d is eating\n"
 # define SLEEP_MSG "%ld %d is sleeping\n"
 # define THINK_MSG "%ld %d is thinking\n"
