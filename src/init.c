@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:26:18 by silic             #+#    #+#             */
-/*   Updated: 2025/06/22 13:44:35 by stefan           ###   ########.fr       */
+/*   Updated: 2025/06/24 12:53:44 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	create_forks(t_philosopher *philosopher)
 	int	i;
 
 	i = 0;
-	philosopher->forks = malloc(sizeof(pthread_mutex_t) * philosopher->number_of_philosophers);
+	philosopher->forks = malloc(sizeof(pthread_mutex_t)
+			* philosopher->number_of_philosophers);
 	if (!philosopher->forks)
 		return (1);
 	while (i < philosopher->number_of_philosophers)
@@ -56,7 +57,7 @@ int	create_forks(t_philosopher *philosopher)
 	return (0);
 }
 
-void	cleanup_mutexes(t_philosopher *philosopher)
+void	cleanup(t_philosopher *philosopher)
 {
 	int	i;
 
@@ -71,11 +72,13 @@ void	cleanup_mutexes(t_philosopher *philosopher)
 	pthread_mutex_destroy(&philosopher->start_mutex);
 }
 
-int	init_control_thread(t_philosopher *philosopher, t_control *control, t_philo *philo_array)
+int	init_control_thread(t_philosopher *philosopher, t_control *control,
+		t_philo *philo_array)
 {
 	control->philosopher = philosopher;
 	control->philo_array = philo_array;
-	if (pthread_create(&control->ctrl_thread, NULL, control_routine, control) != 0)
+	if (pthread_create(&control->ctrl_thread, NULL, control_routine,
+			control) != 0)
 	{
 		printf(ERR_THREAD);
 		return (1);

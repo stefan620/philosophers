@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:46:02 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/22 13:43:08 by stefan           ###   ########.fr       */
+/*   Updated: 2025/06/24 13:09:36 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 
 # include <pthread.h>
 # include <stdbool.h>
-# include <sys/time.h>
-# include <unistd.h>
+# include <stdint.h> // for int64_t
 # include <stdio.h>
 # include <stdlib.h>
-# include <stdint.h> // for int64_t
+# include <sys/time.h>
+# include <unistd.h>
 
 // Error messages
 # define ERR_MSG "Error: Invalid argument\n"
@@ -40,7 +40,7 @@
 # define THINK_MSG "%ld %d is thinking\n"
 # define T_FORK "%ld %d has taken fork\n"
 # define P_FORK "%ld %d has put down fork\n"
-//Error messages
+// Error messages
 struct	s_philosopher;
 
 typedef struct s_philo
@@ -51,49 +51,56 @@ typedef struct s_philo
 	pthread_mutex_t			meal_mutex;
 	int						meals_eaten;
 	int64_t					last_meal;
-}	t_philo;
+}							t_philo;
 
 typedef struct s_control
 {
 	pthread_t				ctrl_thread;
 	struct s_philosopher	*philosopher;
 	t_philo					*philo_array;
-}	t_control;
+}							t_control;
 
 typedef struct s_philosopher
 {
-	t_philo			*philo_array;
-	int				number_of_philosophers;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				number_of_times_each_philo_must_eat;
-	int64_t			start_time;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	dead_mutex;
-	pthread_mutex_t	start_mutex;
-	int				start;
-	int				dead;
-}	t_philosopher;
+	t_philo					*philo_array;
+	int						number_of_philosophers;
+	int						time_to_die;
+	int						time_to_eat;
+	int						time_to_sleep;
+	int						number_of_times_each_eats;
+	int64_t					start_time;
+	pthread_mutex_t			*forks;
+	pthread_mutex_t			dead_mutex;
+	pthread_mutex_t			start_mutex;
+	int						start;
+	int						dead;
+}							t_philosopher;
 
-int		data_prep(t_philosopher *philosopher, int argc, char **argv);
-int		create_philo(t_philosopher *philosopher, t_philo *philo);
-int		create_philo_extend(t_philosopher *philosopher, t_philo *philo, int i);
-void	*philo_routine(void *arg);
-int		ft_atoi(const char *str);
-int64_t	get_time(void);
-int		check_is_dead(t_philo *philo);
-int		check_started(t_philo *philo);
-void	determine_fork_order(t_philo *philo, int *v);
-int		take_forks(t_philo *philo, int *v);
-void	release_forks(t_philo *philo, int *v);
+int							data_prep(t_philosopher *philosopher, int argc,
+								char **argv);
+int							create_philo(t_philosopher *philosopher,
+								t_philo *philo);
+int							create_philo_extend(t_philosopher *philosopher,
+								t_philo *philo, int i);
+void						*philo_routine(void *arg);
+int							ft_atoi(const char *str);
+int64_t						get_time(void);
+int							check_is_dead(t_philo *philo);
+int							check_started(t_philo *philo);
+void						determine_fork_order(t_philo *philo, int *v);
+int							take_forks(t_philo *philo, int *v);
+void						release_forks(t_philo *philo, int *v);
 
-int		create_forks(t_philosopher *philosopher);
-void	eat(t_philosopher *philosopher, int id);
-void	sleep1(t_philosopher *philosopher, int id);
-int		init_control_thread(t_philosopher *philosopher,\
-		t_control *control, t_philo *philo_array);
-void	*control_routine(void *arg);
-void	cleanup_mutexes(t_philosopher *philosopher);
+int							create_forks(t_philosopher *philosopher);
+void						eat(t_philosopher *philosopher, int id);
+void						sleep1(t_philosopher *philosopher, int id);
+int							init_control_thread(t_philosopher *philosopher,
+								t_control *control, t_philo *philo_array);
+void						*control_routine(void *arg);
+void						cleanup(t_philosopher *philosopher);
+int							philo_try_take_forks(t_philo *philo, int *v);
+int							philo_eat_and_check(t_philo *philo, int *v);
+void						philo_sleep_and_think(t_philo *philo);
+int							philo_wait_for_start(t_philo *philo);
 
 #endif // PHILOSOPHERS_H

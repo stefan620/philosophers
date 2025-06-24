@@ -1,12 +1,13 @@
 NAME		=	philo
 
 CC			=	cc
-CFLAGS		= -pthread
+CFLAGS		= -pthread -Wall -Wextra -Werror -g -fsanitize=thread
 
 SRCS		=	./src/philosophers.c \
 				./src/routines.c \
 				./src/init_utils.c \
 				./src/routine_utils.c \
+				./src/routine_utils_2.c \
 				./src/init.c \
 				./src/cycle.c \
 				./utils/argument_prep.c \
