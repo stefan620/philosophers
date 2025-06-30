@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:19:33 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/24 16:00:37 by silic            ###   ########.fr       */
+/*   Updated: 2025/06/30 16:49:34 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ int	main(int argc, char **argv)
 	philosopher.dead = 0;
 	if (data_prep(&philosopher, argc, argv))
 		return (1);
-	if (philosopher.number_of_philosophers == 1)
+	if (philosopher.num_of_philo == 1)
 		return (philo_extend(philosopher), 0);
-	philo = malloc(sizeof(t_philo) * philosopher.number_of_philosophers);
+	philo = malloc(sizeof(t_philo) * philosopher.num_of_philo);
 	if (!philo)
 		return (1);
 	philosopher.philo_array = philo;
@@ -37,7 +37,7 @@ int	main(int argc, char **argv)
 		return (free(philo), printf(ERR_PHILO), 1);
 	if (init_control_thread(&philosopher, &control, philo))
 		return (free(philo), printf(ERR_THREAD), 1);
-	while (i < philosopher.number_of_philosophers)
+	while (i < philosopher.num_of_philo)
 		pthread_join(philo[i++].thread, NULL);
 	pthread_join(control.ctrl_thread, NULL);
 	return (cleanup(&philosopher), free(philo), free(philosopher.forks), 0);

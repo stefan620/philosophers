@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:58:04 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/24 13:09:36 by silic            ###   ########.fr       */
+/*   Updated: 2025/06/30 16:49:34 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int	data_prep(t_philosopher *philosopher, int argc, char **argv)
 {
 	if (argc != 5 && argc != 6)
 		return (write(2, ERR_MSG2, sizeof(ERR_MSG2)), 1);
-	philosopher->number_of_philosophers = ft_atoi(argv[1]);
-	if (philosopher->number_of_philosophers < 1)
+	philosopher->num_of_philo = ft_atoi(argv[1]);
+	if (philosopher->num_of_philo < 1)
 		return (write(2, ERR_MSG3, sizeof(ERR_MSG3)), 1);
 	philosopher->time_to_die = ft_atoi(argv[2]);
 	if (philosopher->time_to_die < 1)

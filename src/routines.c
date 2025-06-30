@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:23:43 by silic             #+#    #+#             */
-/*   Updated: 2025/06/24 13:23:31 by silic            ###   ########.fr       */
+/*   Updated: 2025/06/30 17:00:28 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ static int	check_philo_death(t_philosopher *philosopher, t_philo *philos,
 		int i)
 {
 	int64_t	time_since_last_meal;
+	int64_t	t;
 
+	t = philosopher->start_time;
 	pthread_mutex_lock(&philos[i].meal_mutex);
 	time_since_last_meal = get_time() - philos[i].last_meal;
 	if (time_since_last_meal >= philosopher->time_to_die)
@@ -48,7 +50,7 @@ static int	check_philo_death(t_philosopher *philosopher, t_philo *philos,
 		if (!philosopher->dead)
 		{
 			philosopher->dead = 1;
-			printf(DEAD_MSG, get_time(), philos[i].id);
+			printf(DEAD_MSG, get_time() - t, philos[i].id);
 		}
 		pthread_mutex_unlock(&philosopher->dead_mutex);
 		pthread_mutex_unlock(&philos[i].meal_mutex);
@@ -65,7 +67,7 @@ static int	count_finished_eating(t_philosopher *philosopher, t_philo *philos)
 
 	i = 0;
 	finished_eating_count = 0;
-	while (i < philosopher->number_of_philosophers)
+	while (i < philosopher->num_of_philo)
 	{
 		pthread_mutex_lock(&philos[i].meal_mutex);
 		if (philosopher->number_of_times_each_eats != -1
@@ -81,7 +83,7 @@ static int	check_all_philos_finished(t_philosopher *philosopher,
 		int finished_eating_count)
 {
 	if (philosopher->number_of_times_each_eats != -1
-		&& finished_eating_count == philosopher->number_of_philosophers)
+		&& finished_eating_count == philosopher->num_of_philo)
 	{
 		pthread_mutex_lock(&philosopher->dead_mutex);
 		philosopher->dead = 1;
@@ -105,7 +107,7 @@ void	*control_routine(void *arg)
 	while (1)
 	{
 		i = 0;
-		while (i < philosopher->number_of_philosophers)
+		while (i < philosopher->num_of_philo)
 		{
 			if (check_philo_death(philosopher, philos, i))
 				return (NULL);

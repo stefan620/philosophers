@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:26:18 by silic             #+#    #+#             */
-/*   Updated: 2025/06/24 12:53:44 by silic            ###   ########.fr       */
+/*   Updated: 2025/06/30 16:49:34 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	create_philo(t_philosopher *philosopher, t_philo *philo)
 	philosopher->start = 0;
 	philosopher->dead = 0;
 	pthread_mutex_init(&philosopher->dead_mutex, NULL);
-	while (i < philosopher->number_of_philosophers)
+	while (i < philosopher->num_of_philo)
 	{
 		if (create_philo_extend(philosopher, philo, i))
 			return (pthread_mutex_destroy(&philosopher->start_mutex), 1);
@@ -30,7 +30,7 @@ int	create_philo(t_philosopher *philosopher, t_philo *philo)
 	}
 	philosopher->start_time = get_time();
 	i = 0;
-	while (i < philosopher->number_of_philosophers)
+	while (i < philosopher->num_of_philo)
 	{
 		philo[i].last_meal = philosopher->start_time;
 		i++;
@@ -45,10 +45,10 @@ int	create_forks(t_philosopher *philosopher)
 
 	i = 0;
 	philosopher->forks = malloc(sizeof(pthread_mutex_t)
-			* philosopher->number_of_philosophers);
+			* philosopher->num_of_philo);
 	if (!philosopher->forks)
 		return (1);
-	while (i < philosopher->number_of_philosophers)
+	while (i < philosopher->num_of_philo)
 	{
 		if (pthread_mutex_init(&philosopher->forks[i], NULL) != 0)
 			return (1);
@@ -62,7 +62,7 @@ void	cleanup(t_philosopher *philosopher)
 	int	i;
 
 	i = 0;
-	while (i < philosopher->number_of_philosophers)
+	while (i < philosopher->num_of_philo)
 	{
 		pthread_mutex_destroy(&philosopher->philo_array[i].meal_mutex);
 		pthread_mutex_destroy(&philosopher->forks[i]);

@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:46:02 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/24 16:27:32 by silic            ###   ########.fr       */
+/*   Updated: 2025/06/30 16:53:56 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_control
 typedef struct s_philosopher
 {
 	t_philo					*philo_array;
-	int						number_of_philosophers;
+	int						num_of_philo;
 	int						time_to_die;
 	int						time_to_eat;
 	int						time_to_sleep;
@@ -102,5 +102,6 @@ int							philo_try_take_forks(t_philo *philo, int *v);
 int							philo_eat_and_check(t_philo *philo, int *v);
 void						philo_sleep_and_think(t_philo *philo);
 int							philo_wait_for_start(t_philo *philo);
+void						ft_sleep(long duration_ms, t_philo *philo);
 
 #endif // PHILOSOPHERS_H

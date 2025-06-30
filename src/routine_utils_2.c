@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 13:04:32 by silic             #+#    #+#             */
-/*   Updated: 2025/06/24 13:06:14 by silic            ###   ########.fr       */
+/*   Updated: 2025/06/30 16:59:52 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,12 @@ int	philo_eat_and_check(t_philo *philo, int *v)
 
 void	philo_sleep_and_think(t_philo *philo)
 {
+	int64_t	start_time;
+
+	start_time = philo->philosopher->start_time;
 	sleep1(philo->philosopher, philo->id - 1);
 	if (!check_is_dead(philo))
-		printf(THINK_MSG, get_time(), philo->id);
+		printf(THINK_MSG, get_time() - start_time, philo->id);
 }
 
 int	philo_wait_for_start(t_philo *philo)
@@ -49,6 +52,7 @@ int	philo_wait_for_start(t_philo *philo)
 	if (!check_started(philo))
 	{
 		usleep(100);
+		philo->philosopher->start_time = get_time();
 		return (1);
 	}
 	return (0);

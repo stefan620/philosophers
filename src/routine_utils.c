@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:48:14 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/24 16:22:06 by silic            ###   ########.fr       */
+/*   Updated: 2025/06/30 16:55:01 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	check_started(t_philo *philo)
 void	determine_fork_order(t_philo *philo, int *v)
 {
 	v[LEFT_FORK] = philo->id - 1;
-	v[RIGHT_FORK] = philo->id % (philo->philosopher->number_of_philosophers + 1);
+	v[RIGHT_FORK] = philo->id % (philo->philosopher->num_of_philo + 1);
 	v[HAS_LEFT] = 0;
 	v[HAS_RIGHT] = 0;
 	if ((philo->id - 1) % 2 == 0)
@@ -66,8 +66,8 @@ int	take_forks(t_philo *philo, int *v)
 	v[HAS_RIGHT] = (v[FIRST] == v[RIGHT_FORK]);
 	if (check_is_dead(philo))
 		return (1);
-	printf(T_FORK, get_time(), philo->id);
-	if (philo->philosopher->number_of_philosophers == 1)
+	printf(T_FORK, get_time() - philo->philosopher->start_time, philo->id);
+	if (philo->philosopher->num_of_philo == 1)
 	{
 		usleep(philo->philosopher->time_to_die * 1000);
 		pthread_mutex_unlock(&philo->philosopher->forks[v[FIRST]]);
@@ -78,7 +78,7 @@ int	take_forks(t_philo *philo, int *v)
 	v[HAS_RIGHT] |= (v[SECOND] == v[RIGHT_FORK]);
 	if (check_is_dead(philo))
 		return (1);
-	printf(T_FORK, get_time(), philo->id);
+	printf(T_FORK, get_time() - philo->philosopher->start_time, philo->id);
 	return (1);
 }
 

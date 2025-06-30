@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cycle.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:28:23 by silic             #+#    #+#             */
-/*   Updated: 2025/06/21 17:30:25 by stefan           ###   ########.fr       */
+/*   Updated: 2025/06/30 16:55:57 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,14 @@ void	eat(t_philosopher *philosopher, int id)
 	pthread_mutex_unlock(&philosopher->dead_mutex);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal = get_time();
-	printf(EAT_MSG, philo->last_meal, id + 1);
+	printf(EAT_MSG, philo->last_meal - philo->philosopher->start_time, id + 1);
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
-	usleep(philosopher->time_to_eat * 1000);
+	ft_sleep(philosopher->time_to_eat, &philosopher->philo_array[id]);
 }
 
 void	sleep1(t_philosopher *philosopher, int id)
 {
-	printf (SLEEP_MSG, get_time(), id + 1);
-	usleep (philosopher->time_to_sleep * 1000);
+	printf (SLEEP_MSG, get_time() - philosopher->start_time, id + 1);
+	ft_sleep(philosopher->time_to_sleep, &philosopher->philo_array[id]);
 }
