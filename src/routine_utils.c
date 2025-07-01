@@ -61,6 +61,7 @@ void	determine_fork_order(t_philo *philo, int *v)
 
 int	take_forks(t_philo *philo, int *v)
 {
+	usleep(1000);
 	pthread_mutex_lock(&philo->philosopher->forks[v[FIRST]]);
 	v[HAS_LEFT] = (v[FIRST] == v[LEFT_FORK]);
 	v[HAS_RIGHT] = (v[FIRST] == v[RIGHT_FORK]);

@@ -14,14 +14,9 @@
 
 int	philo_try_take_forks(t_philo *philo, int *v)
 {
-	pthread_mutex_lock(&philo->philosopher->waiter);
 	determine_fork_order(philo, v);
 	if (!take_forks(philo, v))
-	{
-		pthread_mutex_unlock(&philo->philosopher->waiter);
 		return (0);
-	}
-	pthread_mutex_unlock(&philo->philosopher->waiter);
 	if (check_is_dead(philo))
 	{
 		release_forks(philo, v);

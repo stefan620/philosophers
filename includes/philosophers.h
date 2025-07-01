@@ -72,7 +72,6 @@ typedef struct s_philosopher
 	pthread_mutex_t			*forks;
 	pthread_mutex_t			dead_mutex;
 	pthread_mutex_t			start_mutex;
-	pthread_mutex_t			waiter;
 	int						start;
 	int						dead;
 }							t_philosopher;

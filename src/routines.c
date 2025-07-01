@@ -29,7 +29,7 @@ void	*philo_routine(void *arg)
 		if (!philo_try_take_forks(philo, v))
 		{
 			usleep(100);
-			break ;
+			continue ;
 		}
 		if (!philo_eat_and_check(philo, v))
 			break ;

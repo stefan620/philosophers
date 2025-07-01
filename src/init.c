@@ -22,7 +22,6 @@ int	create_philo(t_philosopher *philosopher, t_philo *philo)
 	philosopher->start = 0;
 	philosopher->dead = 0;
 	pthread_mutex_init(&philosopher->dead_mutex, NULL);
-	pthread_mutex_init(&philosopher->waiter, NULL);
 	while (i < philosopher->num_of_philo)
 	{
 		if (create_philo_extend(philosopher, philo, i))
@@ -71,7 +70,6 @@ void	cleanup(t_philosopher *philosopher)
 	}
 	pthread_mutex_destroy(&philosopher->dead_mutex);
 	pthread_mutex_destroy(&philosopher->start_mutex);
-	pthread_mutex_destroy(&philosopher->waiter);
 }
 
 int	init_control_thread(t_philosopher *philosopher, t_control *control,
