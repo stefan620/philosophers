@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
+/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:48:14 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/30 16:55:01 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/01 15:55:54 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	check_started(t_philo *philo)
 void	determine_fork_order(t_philo *philo, int *v)
 {
 	v[LEFT_FORK] = philo->id - 1;
-	v[RIGHT_FORK] = philo->id % (philo->philosopher->num_of_philo + 1);
+	v[RIGHT_FORK] = philo->id % philo->philosopher->num_of_philo;
 	v[HAS_LEFT] = 0;
 	v[HAS_RIGHT] = 0;
 	if ((philo->id - 1) % 2 == 0)
@@ -67,12 +67,6 @@ int	take_forks(t_philo *philo, int *v)
 	if (check_is_dead(philo))
 		return (1);
 	printf(T_FORK, get_time() - philo->philosopher->start_time, philo->id);
-	if (philo->philosopher->num_of_philo == 1)
-	{
-		usleep(philo->philosopher->time_to_die * 1000);
-		pthread_mutex_unlock(&philo->philosopher->forks[v[FIRST]]);
-		return (0);
-	}
 	pthread_mutex_lock(&philo->philosopher->forks[v[SECOND]]);
 	v[HAS_LEFT] |= (v[SECOND] == v[LEFT_FORK]);
 	v[HAS_RIGHT] |= (v[SECOND] == v[RIGHT_FORK]);

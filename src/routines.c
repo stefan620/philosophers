@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routines.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
+/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:23:43 by silic             #+#    #+#             */
-/*   Updated: 2025/06/30 17:00:28 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/01 15:47:35 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	*philo_routine(void *arg)
 		if (philo_wait_for_start(philo))
 			continue ;
 		if (!philo_try_take_forks(philo, v))
+		{
+			usleep(100);
 			break ;
+		}
 		if (!philo_eat_and_check(philo, v))
 			break ;
 		philo_sleep_and_think(philo);
