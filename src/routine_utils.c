@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:48:14 by stefan            #+#    #+#             */
-/*   Updated: 2025/07/01 15:55:54 by stefan           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:34:05 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,17 @@ int	take_forks(t_philo *philo, int *v)
 	v[HAS_RIGHT] = (v[FIRST] == v[RIGHT_FORK]);
 	if (check_is_dead(philo))
 		return (1);
+	pthread_mutex_lock(&philo->philosopher->print_mutex);
 	printf(T_FORK, get_time() - philo->philosopher->start_time, philo->id);
+	pthread_mutex_unlock(&philo->philosopher->print_mutex);
 	pthread_mutex_lock(&philo->philosopher->forks[v[SECOND]]);
 	v[HAS_LEFT] |= (v[SECOND] == v[LEFT_FORK]);
 	v[HAS_RIGHT] |= (v[SECOND] == v[RIGHT_FORK]);
 	if (check_is_dead(philo))
 		return (1);
+	pthread_mutex_lock(&philo->philosopher->print_mutex);
 	printf(T_FORK, get_time() - philo->philosopher->start_time, philo->id);
+	pthread_mutex_unlock(&philo->philosopher->print_mutex);
 	return (1);
 }
 

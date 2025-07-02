@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:46:02 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/30 16:53:56 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/02 17:21:06 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@
 # define EAT_MSG "%ld %d is eating\n"
 # define SLEEP_MSG "%ld %d is sleeping\n"
 # define THINK_MSG "%ld %d is thinking\n"
-# define T_FORK "%ld %d has taken fork\n"
-# define P_FORK "%ld %d has put down fork\n"
+# define T_FORK "%ld %d has taken a fork\n"
+# define P_FORK "%ld %d has put down a fork\n"
 // Error messages
 struct	s_philosopher;
 
@@ -72,6 +72,7 @@ typedef struct s_philosopher
 	pthread_mutex_t			*forks;
 	pthread_mutex_t			dead_mutex;
 	pthread_mutex_t			start_mutex;
+	pthread_mutex_t			print_mutex;
 	int						start;
 	int						dead;
 }							t_philosopher;

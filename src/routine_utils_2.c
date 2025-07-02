@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 13:04:32 by silic             #+#    #+#             */
-/*   Updated: 2025/06/30 16:59:52 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/02 17:29:13 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,10 @@ void	philo_sleep_and_think(t_philo *philo)
 
 	start_time = philo->philosopher->start_time;
 	sleep1(philo->philosopher, philo->id - 1);
+	pthread_mutex_lock(&philo->philosopher->print_mutex);
 	if (!check_is_dead(philo))
 		printf(THINK_MSG, get_time() - start_time, philo->id);
+	pthread_mutex_unlock(&philo->philosopher->print_mutex);
 }
 
 int	philo_wait_for_start(t_philo *philo)
