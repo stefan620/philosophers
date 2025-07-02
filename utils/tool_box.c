@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 22:16:40 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/30 16:48:36 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/02 18:35:53 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,17 @@ void	ft_sleep(long duration_ms, t_philo *philo)
 		if (get_time() - start >= duration_ms)
 			break ;
 		usleep(100);
+	}
+}
+
+void	thread_clean(t_philo *philo, int i)
+{
+	int	j;
+
+	j = 0;
+	while (j < i)
+	{
+		pthread_join(philo[j].thread, NULL);
+		j++;
 	}
 }

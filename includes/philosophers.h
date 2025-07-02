@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:46:02 by stefan            #+#    #+#             */
-/*   Updated: 2025/07/02 17:21:06 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/02 18:36:05 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,6 @@ int							philo_eat_and_check(t_philo *philo, int *v);
 void						philo_sleep_and_think(t_philo *philo);
 int							philo_wait_for_start(t_philo *philo);
 void						ft_sleep(long duration_ms, t_philo *philo);
+void						thread_clean(t_philo *philo, int i);
 
 #endif // PHILOSOPHERS_H

@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:26:18 by silic             #+#    #+#             */
-/*   Updated: 2025/07/02 17:23:15 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/02 18:35:10 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	create_philo(t_philosopher *philosopher, t_philo *philo)
 	while (i < philosopher->num_of_philo)
 	{
 		if (create_philo_extend(philosopher, philo, i))
-			return (pthread_mutex_destroy(&philosopher->start_mutex), 1);
+			return (thread_clean(philo, i), 1);
 		i++;
 	}
 	philosopher->start_time = get_time();
@@ -71,6 +71,7 @@ void	cleanup(t_philosopher *philosopher)
 	}
 	pthread_mutex_destroy(&philosopher->dead_mutex);
 	pthread_mutex_destroy(&philosopher->start_mutex);
+	pthread_mutex_destroy(&philosopher->print_mutex);
 }
 
 int	init_control_thread(t_philosopher *philosopher, t_control *control,
