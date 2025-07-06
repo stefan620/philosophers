@@ -18,14 +18,15 @@ void	*philo_routine(void *arg)
 	int		v[8];
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0)
-		usleep(1000);
+
 	while (1)
 	{
 		if (check_is_dead(philo))
 			break ;
 		if (philo_wait_for_start(philo))
 			continue ;
+		if (philo->id % 2 == 0)
+			usleep(1000);
 		if (!philo_try_take_forks(philo, v))
 		{
 			usleep(100);

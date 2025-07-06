@@ -54,7 +54,6 @@ int	philo_wait_for_start(t_philo *philo)
 	if (!check_started(philo))
 	{
 		usleep(100);
-		philo->philosopher->start_time = get_time();
 		return (1);
 	}
 	return (0);
