@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routines.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:23:43 by silic             #+#    #+#             */
-/*   Updated: 2025/07/01 15:47:35 by stefan           ###   ########.fr       */
+/*   Updated: 2025/07/07 16:00:06 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	*philo_routine(void *arg)
 	int		v[8];
 
 	philo = (t_philo *)arg;
-
 	while (1)
 	{
 		if (check_is_dead(philo))
@@ -54,7 +53,9 @@ static int	check_philo_death(t_philosopher *philosopher, t_philo *philos,
 		if (!philosopher->dead)
 		{
 			philosopher->dead = 1;
+			pthread_mutex_lock(&philosopher->print_mutex);
 			printf(DEAD_MSG, get_time() - t, philos[i].id);
+			pthread_mutex_unlock(&philosopher->print_mutex);
 		}
 		pthread_mutex_unlock(&philosopher->dead_mutex);
 		pthread_mutex_unlock(&philos[i].meal_mutex);

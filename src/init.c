@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:26:18 by silic             #+#    #+#             */
-/*   Updated: 2025/07/02 18:35:10 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/07 17:02:34 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,26 @@ int	create_forks(t_philosopher *philosopher)
 	while (i < philosopher->num_of_philo)
 	{
 		if (pthread_mutex_init(&philosopher->forks[i], NULL) != 0)
+		{
+			clean_forks(philosopher, i);
+			free(philosopher->forks);
 			return (1);
+		}
 		i++;
 	}
 	return (0);
+}
+
+void	clean_forks(t_philosopher *philosopher, int num_of_philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < num_of_philo)
+	{
+		pthread_mutex_destroy(&philosopher->forks[i]);
+		i++;
+	}
 }
 
 void	cleanup(t_philosopher *philosopher)
@@ -83,6 +99,7 @@ int	init_control_thread(t_philosopher *philosopher, t_control *control,
 			control) != 0)
 	{
 		printf(ERR_THREAD);
+		thread_clean(philo_array, philosopher->num_of_philo);
 		return (1);
 	}
 	return (0);

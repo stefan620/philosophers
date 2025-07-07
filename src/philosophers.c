@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:19:33 by stefan            #+#    #+#             */
-/*   Updated: 2025/07/03 12:20:52 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/07 16:50:03 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ int	main(int argc, char **argv)
 	if (create_forks(&philosopher))
 		return (free(philo), printf(ERR_FORKS), 1);
 	if (create_philo(&philosopher, philo))
-		return (free(philo), printf(ERR_PHILO), 1);
+		return (free(philo),free(philosopher.forks) ,printf(ERR_PHILO), 1);
 	if (init_control_thread(&philosopher, &control, philo))
-		return (free(philo), printf(ERR_THREAD), 1);
+		return (free(philo),free(philosopher.forks), printf(ERR_THREAD), 1);
 	while (i < philosopher.num_of_philo)
 		pthread_join(philo[i++].thread, NULL);
 	pthread_join(control.ctrl_thread, NULL);
