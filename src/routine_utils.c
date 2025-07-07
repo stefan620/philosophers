@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:48:14 by stefan            #+#    #+#             */
-/*   Updated: 2025/07/07 17:14:57 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/07 17:35:30 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	determine_fork_order(t_philo *philo, int *v)
 int	take_forks(t_philo *philo, int *v)
 {
 	int	is_dead;
-
+	usleep(1000);
 	pthread_mutex_lock(&philo->philosopher->forks[v[FIRST]]);
 	v[HAS_LEFT] = (v[FIRST] == v[LEFT_FORK]);
 	v[HAS_RIGHT] = (v[FIRST] == v[RIGHT_FORK]);
