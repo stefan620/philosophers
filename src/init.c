@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:26:18 by silic             #+#    #+#             */
-/*   Updated: 2025/07/07 17:02:34 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/07 17:29:12 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,29 @@ int	create_philo(t_philosopher *philosopher, t_philo *philo)
 	int	i;
 
 	i = 0;
-	pthread_mutex_init(&philosopher->start_mutex, NULL);
-	pthread_mutex_init(&philosopher->print_mutex, NULL);
-	pthread_mutex_lock(&philosopher->start_mutex);
+	if (pthread_mutex_init(&philosopher->start_mutex, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&philosopher->print_mutex, NULL) != 0)
+		return (pthread_mutex_destroy(&philosopher->start_mutex), 1);
+	if (pthread_mutex_lock(&philosopher->start_mutex) != 0)
+		return (pthread_mutex_destroy(&philosopher->start_mutex), 
+			pthread_mutex_destroy(&philosopher->print_mutex), 1);
 	philosopher->start = 0;
 	philosopher->dead = 0;
-	pthread_mutex_init(&philosopher->dead_mutex, NULL);
+	if (pthread_mutex_init(&philosopher->dead_mutex, NULL) != 0)
+		return (pthread_mutex_unlock(&philosopher->start_mutex),
+			pthread_mutex_destroy(&philosopher->start_mutex),
+			pthread_mutex_destroy(&philosopher->print_mutex), 1);
 	while (i < philosopher->num_of_philo)
 	{
 		if (create_philo_extend(philosopher, philo, i))
-			return (thread_clean(philo, i), 1);
+		{
+			thread_clean_with_mutexes(philo, i);
+			pthread_mutex_destroy(&philosopher->dead_mutex);
+			pthread_mutex_destroy(&philosopher->start_mutex);
+			pthread_mutex_destroy(&philosopher->print_mutex);
+			return (1);
+		}
 		i++;
 	}
 	philosopher->start_time = get_time();

@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 22:16:40 by stefan            #+#    #+#             */
-/*   Updated: 2025/07/07 16:43:27 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/07 17:29:12 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,19 @@ void	thread_clean(t_philo *philo, int i)
 	while (j < i)
 	{
 		pthread_join(philo[j].thread, NULL);
+		j++;
+	}
+}
+
+void	thread_clean_with_mutexes(t_philo *philo, int i)
+{
+	int	j;
+
+	j = 0;
+	while (j < i)
+	{
+		pthread_join(philo[j].thread, NULL);
+		pthread_mutex_destroy(&philo[j].meal_mutex);
 		j++;
 	}
 }
