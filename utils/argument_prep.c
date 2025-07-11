@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   argument_prep.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
+/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 17:58:04 by stefan            #+#    #+#             */
-/*   Updated: 2025/06/30 16:49:34 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/09 21:38:51 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,12 @@ int	ft_atoi(const char *str)
 		str++;
 	}
 	return (result * sign);
+}
+
+void	small_main_cleanup(t_philosopher philosopher, t_philo *philo)
+{
+	cleanup(&philosopher);
+	free(philo);
+	free(philosopher.forks);
+	printf(ERR_THREAD);
 }

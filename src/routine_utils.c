@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
+/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 21:48:14 by stefan            #+#    #+#             */
-/*   Updated: 2025/07/07 17:35:30 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/09 21:26:11 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	determine_fork_order(t_philo *philo, int *v)
 int	take_forks(t_philo *philo, int *v)
 {
 	int	is_dead;
+
 	usleep(1000);
 	pthread_mutex_lock(&philo->philosopher->forks[v[FIRST]]);
 	v[HAS_LEFT] = (v[FIRST] == v[LEFT_FORK]);
@@ -72,9 +73,7 @@ int	take_forks(t_philo *philo, int *v)
 	{
 		pthread_mutex_unlock(&philo->philosopher->dead_mutex);
 		pthread_mutex_unlock(&philo->philosopher->forks[v[FIRST]]);
-		v[HAS_LEFT] = 0;
-		v[HAS_RIGHT] = 0;
-		return (1);
+		return (v[HAS_LEFT] = 0, v[HAS_RIGHT] = 0, 1);
 	}
 	pthread_mutex_lock(&philo->philosopher->print_mutex);
 	printf(T_FORK, get_time() - philo->philosopher->start_time, philo->id);
@@ -90,9 +89,7 @@ int	take_forks(t_philo *philo, int *v)
 		pthread_mutex_unlock(&philo->philosopher->dead_mutex);
 		pthread_mutex_unlock(&philo->philosopher->forks[v[FIRST]]);
 		pthread_mutex_unlock(&philo->philosopher->forks[v[SECOND]]);
-		v[HAS_LEFT] = 0;
-		v[HAS_RIGHT] = 0;
-		return (1);
+		return (v[HAS_LEFT] = 0, v[HAS_RIGHT] = 0, 1);
 	}
 	pthread_mutex_lock(&philo->philosopher->print_mutex);
 	printf(T_FORK, get_time() - philo->philosopher->start_time, philo->id);

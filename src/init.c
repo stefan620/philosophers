@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
+/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:26:18 by silic             #+#    #+#             */
-/*   Updated: 2025/07/07 17:29:12 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/09 21:47:19 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	create_philo(t_philosopher *philosopher, t_philo *philo)
 	if (pthread_mutex_init(&philosopher->print_mutex, NULL) != 0)
 		return (pthread_mutex_destroy(&philosopher->start_mutex), 1);
 	if (pthread_mutex_lock(&philosopher->start_mutex) != 0)
-		return (pthread_mutex_destroy(&philosopher->start_mutex), 
+		return (pthread_mutex_destroy(&philosopher->start_mutex),
 			pthread_mutex_destroy(&philosopher->print_mutex), 1);
 	philosopher->start = 0;
 	philosopher->dead = 0;

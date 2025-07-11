@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
+/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:19:33 by stefan            #+#    #+#             */
-/*   Updated: 2025/07/07 17:29:12 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/09 21:37:57 by stefan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,9 @@ int	main(int argc, char **argv)
 	if (create_forks(&philosopher))
 		return (free(philo), printf(ERR_FORKS), 1);
 	if (create_philo(&philosopher, philo))
-	{
-		cleanup(&philosopher);
-		free(philo);
-		free(philosopher.forks);
-		printf(ERR_PHILO);
-		return (1);
-	}
+	return (small_main_cleanup(philosopher, philo), 1);
 	if (init_control_thread(&philosopher, &control, philo))
-	{
-		cleanup(&philosopher);
-		free(philo);
-		free(philosopher.forks);
-		printf(ERR_THREAD);
-		return (1);
-	}
+		return (small_main_cleanup(philosopher, philo), 1);
 	while (i < philosopher.num_of_philo)
 		pthread_join(philo[i++].thread, NULL);
 	pthread_join(control.ctrl_thread, NULL);
