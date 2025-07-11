@@ -3,7 +3,9 @@ NAME		=	philo
 CC			=	cc
 CFLAGS		=   -pthread -Wall -Wextra -Werror -g  # -fsanitize=address
 SRCS		=	./src/philosophers.c \
+				./src/init_utils_2.c \
 				./src/routines.c \
+				./src/forks.c \
 				./src/init_utils.c \
 				./src/routine_utils.c \
 				./src/routine_utils_2.c \

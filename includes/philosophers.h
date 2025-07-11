@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:46:02 by stefan            #+#    #+#             */
-/*   Updated: 2025/07/09 21:34:38 by stefan           ###   ########.fr       */
+/*   Updated: 2025/07/11 14:10:20 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,16 @@
 # define T_FORK "%ld %d has taken a fork\n"
 # define P_FORK "%ld %d has put down a fork\n"
 // Error messages
+
+# define LEFT_FORK 0
+# define RIGHT_FORK 1
+# define HAS_LEFT 2
+# define HAS_RIGHT 3
+# define IS_DEAD 4
+# define STARTED 5
+# define FIRST 6
+# define SECOND 7
+
 struct	s_philosopher;
 
 typedef struct s_philo
@@ -108,6 +118,13 @@ void						thread_clean(t_philo *philo, int i);
 void						thread_clean_with_mutexes(t_philo *philo, int i);
 void						clean_forks(t_philosopher *philosopher,
 								int num_of_philo);
-void						small_main_cleanup(t_philosopher philosopher, t_philo *philo);
+void						small_main_cleanup(t_philosopher philosopher,
+								t_philo *philo);
+int							create_all_philos(t_philosopher *philosopher,
+								t_philo *philo);
+void						init_philo_timing(t_philosopher *philosopher);
+int							init_main_mutexes(t_philosopher *philosopher);
+int							take_second_fork(t_philo *philo, int *v);
+int							take_first_fork(t_philo *philo, int *v);
 
 #endif // PHILOSOPHERS_H

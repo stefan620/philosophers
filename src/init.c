@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stefan <stefan@student.42.fr>              +#+  +:+       +#+        */
+/*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 15:26:18 by silic             #+#    #+#             */
-/*   Updated: 2025/07/09 21:47:19 by stefan           ###   ########.fr       */
+/*   Updated: 2025/07/11 14:06:09 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,11 @@
 
 int	create_philo(t_philosopher *philosopher, t_philo *philo)
 {
-	int	i;
-
-	i = 0;
-	if (pthread_mutex_init(&philosopher->start_mutex, NULL) != 0)
+	if (init_main_mutexes(philosopher) != 0)
 		return (1);
-	if (pthread_mutex_init(&philosopher->print_mutex, NULL) != 0)
-		return (pthread_mutex_destroy(&philosopher->start_mutex), 1);
-	if (pthread_mutex_lock(&philosopher->start_mutex) != 0)
-		return (pthread_mutex_destroy(&philosopher->start_mutex),
-			pthread_mutex_destroy(&philosopher->print_mutex), 1);
-	philosopher->start = 0;
-	philosopher->dead = 0;
-	if (pthread_mutex_init(&philosopher->dead_mutex, NULL) != 0)
-		return (pthread_mutex_unlock(&philosopher->start_mutex),
-			pthread_mutex_destroy(&philosopher->start_mutex),
-			pthread_mutex_destroy(&philosopher->print_mutex), 1);
-	while (i < philosopher->num_of_philo)
-	{
-		if (create_philo_extend(philosopher, philo, i))
-		{
-			thread_clean_with_mutexes(philo, i);
-			pthread_mutex_destroy(&philosopher->dead_mutex);
-			pthread_mutex_destroy(&philosopher->start_mutex);
-			pthread_mutex_destroy(&philosopher->print_mutex);
-			return (1);
-		}
-		i++;
-	}
-	philosopher->start_time = get_time();
-	i = 0;
-	while (i < philosopher->num_of_philo)
-	{
-		philo[i].last_meal = philosopher->start_time;
-		i++;
-	}
-	philosopher->start = 1;
+	if (create_all_philos(philosopher, philo) != 0)
+		return (1);
+	init_philo_timing(philosopher);
 	return (pthread_mutex_unlock(&philosopher->start_mutex), 0);
 }
 
