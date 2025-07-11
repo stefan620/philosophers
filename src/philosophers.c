@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 22:19:33 by stefan            #+#    #+#             */
-/*   Updated: 2025/07/11 14:02:26 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/11 14:29:47 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ static int	small_main_cleanup(t_philosopher philosopher, t_philo *philo);
 
 static int	small_main_cleanup(t_philosopher philosopher, t_philo *philo)
 {
-	cleanup(&philosopher);
+	clean_forks(&philosopher, philosopher.num_of_philo);
+	pthread_mutex_destroy(&philosopher.dead_mutex);
+	pthread_mutex_destroy(&philosopher.start_mutex);
+	pthread_mutex_destroy(&philosopher.print_mutex);
 	free(philo);
 	free(philosopher.forks);
 	printf(ERR_PHILO);

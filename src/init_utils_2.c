@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 14:03:29 by silic             #+#    #+#             */
-/*   Updated: 2025/07/11 14:10:06 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/11 14:29:47 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,9 @@ int	create_all_philos(t_philosopher *philosopher, t_philo *philo)
 	{
 		if (create_philo_extend(philosopher, philo, i))
 		{
+			philosopher->dead = 1;
+			pthread_mutex_unlock(&philosopher->start_mutex);
 			thread_clean_with_mutexes(philo, i);
-			pthread_mutex_destroy(&philosopher->dead_mutex);
-			pthread_mutex_destroy(&philosopher->start_mutex);
-			pthread_mutex_destroy(&philosopher->print_mutex);
 			return (1);
 		}
 		i++;

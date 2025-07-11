@@ -6,7 +6,7 @@
 /*   By: silic <silic@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 13:04:32 by silic             #+#    #+#             */
-/*   Updated: 2025/07/07 16:57:24 by silic            ###   ########.fr       */
+/*   Updated: 2025/07/11 14:26:14 by silic            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	philo_sleep_and_think(t_philo *philo)
 
 int	philo_wait_for_start(t_philo *philo)
 {
+	if (check_is_dead(philo))
+		return (0);
 	if (!check_started(philo))
 	{
 		usleep(100);
